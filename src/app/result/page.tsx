@@ -39,7 +39,6 @@ export default function ResultPage() {
   const [copied, setCopied] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
-  const startedRef = useRef(false);
 
   const generate = useCallback(
     async (a: Answers, s: OutputSettings) => {
@@ -80,10 +79,7 @@ export default function ResultPage() {
     setHasDraft(true);
     setAnswers(draft.answers);
     setSettings(draft.settings);
-    if (!startedRef.current) {
-      startedRef.current = true;
-      void generate(draft.answers, draft.settings);
-    }
+    void generate(draft.answers, draft.settings);
     return () => abortRef.current?.abort();
   }, [generate]);
 
