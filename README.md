@@ -1,92 +1,39 @@
-# ArtistBio
+# Budgetboek
 
-Web-app die op basis van een gestructureerde vragenlijst een professionele
-biografie genereert voor beeldend kunstenaars en muzikanten, via de Anthropic
-Claude API.
+Budgetbeheer voor persoonlijk én zakelijk gebruik: transacties, budgetten, forecast, spaardoelen, gedeelde huishoudens en pushherinneringen. React-frontend + Node/Express-backend met SQLite.
 
-## Stack
+## Bouwen met Claude Code
 
-- **Next.js 14** (App Router) + **TypeScript** (strict mode)
-- **Tailwind CSS** + **shadcn/ui**-componenten
-- **Anthropic Claude API** met streaming via Server-Sent Events
-- Geen database: concepten worden lokaal opgeslagen in `localStorage`
+Open deze map in Claude Code en zeg bijvoorbeeld:
 
-## Pagina's
+> Lees `CLAUDE.md` en `docs/IMPLEMENTATION_PLAN.md` en bouw het project fase voor fase, te beginnen bij fase 0.
 
-| Route     | Functie                                                                       |
-| --------- | ----------------------------------------------------------------------------- |
-| `/`       | Landingspagina met één CTA: _Start je bio_                                     |
-| `/new`    | Multi-step vragenlijst (A–F) met voortgangsbalk en tussentijdse opslag        |
-| `/result` | Gegenereerde bio: kopiëren, download `.txt`, regenereren, toon/lengte wijzigen |
+Claude Code leest `CLAUDE.md` automatisch in. De backend en de frontend-bouwblokken zijn al aanwezig; de hoofdtaak is `frontend/src/BudgetApp.jsx` afbouwen volgens de spec.
 
-## Lokaal draaien
+## Snel starten
 
-1. Installeer dependencies:
+```bash
+# backend
+cd backend && npm install
+cp .env.example .env          # vul JWT_SECRET; VAPID via: npx web-push generate-vapid-keys
+npm start                     # http://localhost:4000
 
-   ```bash
-   npm install
-   ```
+# frontend (nieuwe terminal)
+cd frontend && npm install
+cp .env.example .env
+npm run dev                   # http://localhost:5173
+```
 
-2. Maak `.env.local` aan (zie `.env.local.example`):
+## Structuur
 
-   ```bash
-   cp .env.local.example .env.local
-   ```
-
-   Vul je sleutel in:
-
-   ```
-   ANTHROPIC_API_KEY=sk-ant-...
-   # optioneel
-   ANTHROPIC_MODEL=claude-sonnet-4-6
-   ```
-
-3. Start de dev-server:
-
-   ```bash
-   npm run dev
-   ```
-
-   Open http://localhost:3000.
-
-## Scripts
-
-- `npm run dev` — ontwikkelserver
-- `npm run build` — productiebuild
-- `npm run start` — productieserver
-- `npm run typecheck` — TypeScript-controle zonder build
-- `npm run lint` — Next.js lint
-
-## Environment variables
-
-| Variabele           | Vereist | Omschrijving                                                       |
-| ------------------- | ------- | ------------------------------------------------------------------ |
-| `ANTHROPIC_API_KEY` | Ja      | Anthropic API-sleutel. Wordt **uitsluitend serverside** gebruikt.  |
-| `ANTHROPIC_MODEL`   | Nee     | Modelnaam. Standaard `claude-sonnet-4-6`.                          |
-
-De API-sleutel verlaat de server nooit: generatie loopt via de server-route
-`/api/generate`, die de Claude-respons als SSE-stream terugstuurt naar de client.
-
-## Deployment (Vercel)
-
-1. Push deze repo naar GitHub en importeer het project in Vercel.
-2. Zet onder **Settings → Environment Variables**:
-   - `ANTHROPIC_API_KEY` (vereist)
-   - `ANTHROPIC_MODEL` (optioneel)
-3. Deploy. De route `/api/generate` draait op de Node.js-runtime.
-
-## Aanpassen van de vragenlijst en de prompt
-
-> **Let op:** de oorspronkelijke opdracht verwees naar een vragenlijst en een
-> system prompt "uit het vorige bericht" die niet waren meegeleverd. Hieronder
-> staan de plekken waar je die één-op-één kunt vervangen door je eigen versies.
-
-- **Vragenlijst-velden:** `src/lib/questionnaire.ts` — pas de `SECTIONS`-array aan
-  (secties, velden, labels, placeholders, verplichte velden).
-- **System prompt:** `src/lib/prompt.ts` — `SYSTEM_PROMPT` en `buildUserMessage()`
-  bepalen wat er naar Claude gestuurd wordt.
-- **Output-instellingen** (taal/lengte/toon/perspectief): de opties staan in
-  `src/lib/questionnaire.ts`, de typen in `src/lib/types.ts`.
-
-De bio en de sectie "Aanvulling gewenst" worden gescheiden op de vaste kop
-`## Aanvulling gewenst` (zie `splitBio()` in `src/lib/prompt.ts`).
+```
+CLAUDE.md                     instructies voor Claude Code
+docs/
+  SPECIFICATION.md            volledige functionele + technische spec
+  IMPLEMENTATION_PLAN.md      gefaseerd bouwplan met checklist
+  reference/                  exacte integratie-snippets
+backend/                      Express + SQLite (compleet)
+frontend/                     React + Vite
+  src/                        bouwblokken + App.jsx + BudgetApp.jsx (skelet)
+  public/sw.js                service worker voor pushberichten
+```
