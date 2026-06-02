@@ -8,7 +8,7 @@ Open deze map in Claude Code en zeg bijvoorbeeld:
 
 > Lees `CLAUDE.md` en `docs/IMPLEMENTATION_PLAN.md` en bouw het project fase voor fase, te beginnen bij fase 0.
 
-Claude Code leest `CLAUDE.md` automatisch in. De backend en de frontend-bouwblokken zijn al aanwezig; de hoofdtaak is `frontend/src/BudgetApp.jsx` afbouwen volgens de spec.
+Claude Code leest `CLAUDE.md` automatisch in. De backend en de frontend-bouwblokken zijn al aanwezig; de hoofdtaak — `frontend/src/BudgetApp.jsx` — is volgens de spec uitgebouwd tot de volledige app (dashboard, transacties, budget, forecast, doelen, modals, herinneringen, CSV-import, delen).
 
 ## Snel starten
 
@@ -34,6 +34,6 @@ docs/
   reference/                  exacte integratie-snippets
 backend/                      Express + SQLite (compleet)
 frontend/                     React + Vite
-  src/                        bouwblokken + App.jsx + BudgetApp.jsx (skelet)
-  public/sw.js                service worker voor pushberichten
+  src/                        bouwblokken + App.jsx + BudgetApp.jsx (volledige app)
+  public/                     sw.js, manifest.webmanifest, icon-192/512.png
 ```
