@@ -1,0 +1,36 @@
+# Render Blueprint voor de Budgetboek-backend (Node + Express + SQLite).
+# Gebruik: Render → New → Blueprint → kies deze repo. Render leest dit bestand.
+#
+# LET OP — persistentie:
+#  - Op het GRATIS plan is de schijf vluchtig: bij (her)starten of na slaapstand
+#    raak je de SQLite-data kwijt (accounts/transacties resetten). Prima voor een
+#    preview/demo.
+#  - Wil je behoud van data, kies dan een betaald instance type en voeg een 'disk'
+#    toe (zie het uitgecommentarieerde blok), met DB_FILE op het mountpad.
+services:
+  - type: web
+    name: budgetboek-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true          # Render genereert een sterke waarde
+      - key: CORS_ORIGIN
+        sync: false                  # zet op je Vercel-URL, bijv. https://budgetboek.vercel.app
+      - key: VAPID_SUBJECT
+        value: mailto:kream.art@gmail.com
+      - key: VAPID_PUBLIC_KEY
+        sync: false                  # npx web-push generate-vapid-keys
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+    # Voor blijvende data (betaald plan): zet plan op 'starter' en voeg toe:
+    # disk:
+    #   name: budget-data
+    #   mountPath: /data
+    #   sizeGB: 1
+    # en zet een extra envVar:  DB_FILE = /data/budget.db
